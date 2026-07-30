@@ -94,6 +94,35 @@ async function startServer() {
         }
       }
 
+      // Fallback to FormSubmit if Resend was not used or failed
+      if (!emailSentDirectly) {
+        try {
+          const fsResponse = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              name,
+              email,
+              phone: phone || "Not provided",
+              message,
+              _subject: `New Portfolio Message from ${name}`,
+              _replyto: email,
+              _template: "table",
+            }),
+          });
+
+          if (fsResponse.ok) {
+            console.log(`[FORMSUBMIT SUCCESS] Email dispatched to ${targetEmail}`);
+            emailSentDirectly = true;
+          }
+        } catch (fsErr) {
+          console.error("FormSubmit server error:", fsErr);
+        }
+      }
+
       const newMessage: ContactMessage = {
         id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
         name,
@@ -106,24 +135,12 @@ async function startServer() {
 
       contactMessages.unshift(newMessage);
 
-      const mailtoSubject = encodeURIComponent(`Portfolio Message from ${name}`);
-      const mailtoBody = encodeURIComponent(
-        `New portfolio inquiry details:\n\n` +
-        `Name: ${name}\n` +
-        `Email: ${email}\n` +
-        `Phone: ${phone || "Not provided"}\n` +
-        `Received: ${new Date().toLocaleString()}\n\n` +
-        `Message:\n${message}`
-      );
-      const mailtoUrl = `mailto:${targetEmail}?subject=${mailtoSubject}&body=${mailtoBody}`;
-
       return res.json({
         success: true,
         message: emailSentDirectly
-          ? `Your message was delivered directly to ${targetEmail} via Resend!`
-          : `Message saved! ${resendApiKey ? "Resend dispatch was attempted." : "To send automated emails directly to your inbox, add RESEND_API_KEY in secrets."}`,
+          ? `Your message has been sent directly to ${targetEmail}!`
+          : `Message received and recorded!`,
         contactRecord: newMessage,
-        mailtoUrl,
         targetEmail,
         emailSentDirectly,
         resendConfigured: !!resendApiKey,

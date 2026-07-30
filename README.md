@@ -84,6 +84,25 @@ npm start
 
 ---
 
+## 🔺 Deploying to Vercel (Recommended for Automated Emails)
+
+Vercel natively runs the `/api/contact.ts` serverless function. To ensure automated emails work on Vercel:
+
+1. **Import Repository to Vercel**:
+   - Push your code to GitHub and connect the repository in [Vercel Dashboard](https://vercel.com/new).
+
+2. **Add Environment Variable on Vercel**:
+   - Go to **Project Settings** -> **Environment Variables**.
+   - Add **Key**: `RESEND_API_KEY`
+   - Add **Value**: `re_your_resend_api_key_here` (from [resend.com/api-keys](https://resend.com/api-keys)).
+   - Check all environments (*Production, Preview, Development*).
+   - Click **Save**.
+
+3. **Redeploy**:
+   - Go to **Deployments** tab in Vercel -> Click **Redeploy** so Vercel injects the newly added `RESEND_API_KEY` into your serverless API function!
+
+---
+
 ## 🌐 Deploying to GitHub Pages
 
 If you want to deploy the static frontend to GitHub Pages:
