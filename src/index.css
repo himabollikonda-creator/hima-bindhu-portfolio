@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --navy-main: #17223B;
+    --navy-dark: #0f172a;
+    --navy-light: #263859;
+    --gold-accent: #C9A24B;
+    --gold-light: #E5C378;
+    --gold-dark: #A48031;
+    --bg-offwhite: #F8F9FA;
+  }
+
+  h1, h2, h3, .font-serif-heading {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  code, pre, .font-mono-code {
+    font-family: 'Fira Code', monospace;
+  }
+}
+
+/* Custom Gold Accent Line */
+.gold-heading-accent {
+  position: relative;
+  display: inline-block;
+}
+
+.gold-heading-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A24B, #E5C378);
+  border-radius: 2px;
+}
+
+.gold-heading-accent-center {
+  position: relative;
+  display: inline-block;
+}
+
+.gold-heading-accent-center::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #C9A24B, #E5C378);
+  border-radius: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #17223B;
+}
+::-webkit-scrollbar-thumb {
+  background: #C9A24B;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E5C378;
+}
+
+/* Subtle glow animation */
+@keyframes goldPulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+.animate-gold-pulse {
+  animation: goldPulse 4s infinite ease-in-out;
+}
+
